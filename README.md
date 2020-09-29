@@ -3,4 +3,4 @@
 
 ## 2020 Spring Class has been archived
 
-## 2020 Fall Class is Open now
+## 2020 Fall Class is open now
