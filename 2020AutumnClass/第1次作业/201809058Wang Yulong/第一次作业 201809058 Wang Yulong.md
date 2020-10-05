@@ -92,8 +92,11 @@ w=3.000000,b=3.805937,z=150.000000,delta_z=0.000000
 done!
 final b=3.805937
 ````
-$$此为线性反向传播的代码实例，w=3,b=4,t=150,目的是将z值变为目标值t，方法即为在不改变w的前提下，通过改变b值从而达到改变w值的目标,在这个过程中就需要使用偏导数$$
+$$此为线性反向传播的代码实例，w=3,b=4,t=150,目的是将z值变为目标值t，方法即为在不改变w的前提下，通过改变b值从$$
+$$而达到改变w值的目标,在这个过程中就需要使用偏导数$$
 $$   x = 2*w+3*b $$
 $$   y=2*b+1   $$  
 $$   z=x*y     $$
-$$\frac{\partial{Z}}{\partial{w}} =\frac{\partial{Z}}{\partial{x}}·\frac{\partial{x}}{\partial{w}}+\frac{\partial{Z}}{\partial{y}}·\frac{\partial{Z}}{\partial{w}}$$
+$$\frac{\partial{Z}}{\partial{b}} =\frac{\partial{Z}}{\partial{x}}·\frac{\partial{x}}{\partial{b}}+\frac{\partial{Z}}{\partial{y}}·\frac{\partial{y}}{\partial{b}}$$
+$$ \frac{\partial{Z}}{\partial{w}} =y·3+x·2=9·3+18·2=63$$
+$$\frac{\partial{Z}}{\partial{w}} =\frac{▲Z}{▲w}
