@@ -20,7 +20,7 @@
 &emsp;&emsp;<font face="楷体" >在生物神经网络中，每个神经元与其他神经元相连，当它兴奋时，就会像相邻的神经元发送化学物质，从而改变这些神经元内的电位；如果某神经元的电位超过了一个阈值，那么它就会被激活（兴奋），向其他神经元发送化学物质。把许多这样的神经元按照一定的层次结构连接起来，我们就构建了一个神经网络。</font>
 
 
-![BP神经元结构图](https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3436986209,975932292&fm=26&gp=0.jpg)
+![BP神经元结构图](./Images/神经元.jpg)
 <font face="楷体" font color=#BDB76B><center>**BP神经元结构图**</font></center>
 
 
@@ -42,7 +42,7 @@
 ### <font face="楷体">损失函数</font>
 <font face="宋体">定义：机器算出的值与真实值之间的误差.</font>
 
-````Python
+~~~Python
 线性反向传播---Python
 import numpy as np
 
@@ -73,8 +73,8 @@ def single_variable(w,b,t):
     b = 4
     t = 150
     single_variable(w,b,t)
-````
-```Python
+~~~
+~~~Python
 测试结果：
 
 single variable: b ----- 
@@ -91,12 +91,28 @@ delta_b=0.000000
 w=3.000000,b=3.805937,z=150.000000,delta_z=0.000000
 done!
 final b=3.805937
-````
+~~~
 $$此为线性反向传播的代码实例，w=3,b=4,t=150,目的是将z值变为目标值t，方法即为在不改变w的前提下，通过改变b值从$$
 $$而达到改变w值的目标,在这个过程中就需要使用偏导数$$
 $$   x = 2*w+3*b $$
 $$   y=2*b+1   $$  
 $$   z=x*y     $$
+$$代入计算得：z=162$$
 $$\frac{\partial{Z}}{\partial{b}} =\frac{\partial{Z}}{\partial{x}}·\frac{\partial{x}}{\partial{b}}+\frac{\partial{Z}}{\partial{y}}·\frac{\partial{y}}{\partial{b}}$$
-$$ \frac{\partial{Z}}{\partial{w}} =y·3+x·2=9·3+18·2=63$$
-$$\frac{\partial{Z}}{\partial{w}} =\frac{▲Z}{▲w}
+$$ \frac{\partial{Z}}{\partial{b}} =y·3+x·2=9·3+18·2=63$$
+$$\frac{\partial{Z}}{\partial{b}} =\frac{▲Z}{▲b}=63$$
+$$▲Z=162-150=12$$
+$$\frac{▲Z}{▲b}=63=\frac{12}{▲b}$$
+$$▲b=\frac{12}{63}=0.190476  \tag{误差函数}$$
+正向计算：
+$$第一次迭代：b_1=b-▲b=3.809524  \tag{梯度下降}$$
+$$x_1=2w+3b_1=2×3+3×3.809524=17.428572$$
+$$y_1 = 2 b_1 + 1 = 2 × 3.809524 + 1 = 8.619048$$
+$$z_1 = x_1 × y_1 = 17.43 × 8.62 = 150.217687$$
+$$▲b_1=\frac{150.217687-150}{63}=0.003455$$
+$$第二次迭代：b_2=b_1-▲b_1=3.806068$$
+$$x_2=2w+3b_2=2×3+3×3.806068=17.418204$$
+$$y_2 = 2 b_2 + 1 = 2 × 3.806068 + 1 = 8.612136$$
+$$z_2=x_2 × y_2=150.0079$$
+$$.................$$
+$$共经过5次迭代计算即可达到误差允许范围$$
