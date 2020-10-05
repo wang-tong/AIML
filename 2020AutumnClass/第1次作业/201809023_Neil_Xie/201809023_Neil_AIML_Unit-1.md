@@ -544,6 +544,12 @@ $I(x_j)$：信息量，$x_j$ 越不可能发生时，它一旦发生后的信息
 
 > 代码运行截图
 ![](./images/02.png)
+> 代码运行截图
+![](./images/11.png)
+> 代码运行截图
+![](./images/12.png)
+
+
 
 ### Level3_GDSingleVariable.py
 
