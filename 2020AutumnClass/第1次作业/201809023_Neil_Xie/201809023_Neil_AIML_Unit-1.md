@@ -1,4 +1,4 @@
-# The First-Time Wor
+# The First-Time Work
 
 
 
@@ -556,6 +556,12 @@ $I(x_j)$：信息量，$x_j$ 越不可能发生时，它一旦发生后的信息
 > 代码运行截图
 ![](./images/03.png)
 
+### Level4_GDDoubleVariable.py
+
+> 代码运行截图
+![](./images/13.png)
+
+
 ### Level5_LearningRate.py
 
 > 代码运行截图
@@ -580,5 +586,6 @@ $I(x_j)$：信息量，$x_j$ 越不可能发生时，它一旦发生后的信息
 ![](./images/10.png)
 
 
-
+### 学习心得
+> Pyhton是一门很重要的语言，恰当的使用numpy以及其他功能是必须的。
 
