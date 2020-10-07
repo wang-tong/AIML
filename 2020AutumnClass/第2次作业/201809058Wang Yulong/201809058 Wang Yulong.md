@@ -193,3 +193,188 @@ $$
 2. 自变量与因变量之间的线性相关必须是真实的，而不是形式上的；
 3. 自变量之间应具有一定的互斥性，即自变量之间的相关程度不应高于自变量与因变量之因的相关程度；
 4. 自变量应具有完整的统计数据，其预测值容易确定。
+
+我们可以使用正规方程法，也可以使用梯度下降法，对比如下：
+
+
+|方法|正规方程|梯度下降|
+|---|-----|-----|
+|原理|几次矩阵运算|多次迭代|
+|特殊要求|$X^{\top}X$ 的逆矩阵存在|需要确定学习率|
+|复杂度|$O(n^3)$|$O(n^2)$|
+|适用样本数|$m \lt 10000$|$m \ge 10000$|
+
+## 2.2 正规方程法
+
+$$y=a_0+a_1x_1+a_2x_2+\dots+a_kx_k \tag{1} $$
+
+推导方法
+
+在做函数拟合（回归）时，我们假设函数 $H$ 为：
+
+$$H(w,b) = b + x_1 w_1+x_2 w_2+ \dots +x_n w_n \tag{2}$$
+
+令 $b=w_0$，则：
+
+$$H(W) = w_0 + x_1 \cdot w_1 + x_2 \cdot w_2 + \dots + x_n \cdot w_n\tag{3}$$
+
+公式3中的 $x$ 是一个样本的 $n$ 个特征值，如果我们把 $m$ 个样本一起计算，将会得到下面这个矩阵：
+
+$$H(W) = X \cdot W \tag{4}$$
+
+公式5中的 $X$ 和 $W$ 的矩阵形状如下：
+
+$$
+X = 
+\begin{pmatrix} 
+1 & x_{1,1} & x_{1,2} & \dots & x_{1,n} \\\\
+1 & x_{2,1} & x_{2,2} & \dots & x_{2,n} \\\\
+\vdots & \vdots & \vdots & \ddots & \vdots \\\\
+1 & x_{m,1} & x_{m,2} & \dots & x_{m,n}
+\end{pmatrix} \tag{5}
+$$
+
+$$
+W= \begin{pmatrix}
+w_0 \\\\
+w_1 \\\\
+\vdots \\\\
+ w_n
+\end{pmatrix}  \tag{6}
+$$
+
+然后我们期望假设函数的输出与真实值一致，则有：
+
+$$H(W) = X \cdot W = Y \tag{7}$$
+
+其中，Y的形状如下：
+
+$$
+Y= \begin{pmatrix}
+y_1 \\\\
+y_2 \\\\
+\vdots \\\\
+y_m
+\end{pmatrix}  \tag{8}
+$$
+
+
+直观上看，$W = Y/X$，但是这里三个值都是矩阵，而矩阵没有除法，所以需要得到 $X$ 的逆矩阵，用 $Y$ 乘以 $X$ 的逆矩阵即可。但是又会遇到一个问题，只有方阵才有逆矩阵，而 $X$ 不一定是方阵，所以要先把左侧变成方阵，就可能会有逆矩阵存在了。所以，先把等式两边同时乘以 $X$ 的转置矩阵，以便得到 $X$ 的方阵：
+
+$$X^{\top} X W = X^{\top} Y \tag{9}$$
+
+其中，$X^{\top}$ 是 $X$ 的转置矩阵，$ X^{\top}X$ 一定是个方阵，并且假设其存在逆矩阵，把它移到等式右侧来：
+
+$$W = (X^{\top} X)^{-1}{X^{\top} Y} \tag{10}$$
+
+至此可以求出 $W$ 的正规方程。
+
+## 2.3 神经网络法
+
+定义神经网络结构
+
+我们定义一个如图5-1所示的一层的神经网络，输入层为2或者更多，反正大于2了就没区别。这个一层的神经网络的特点是：
+
+1. 没有中间层，只有输入项和输出层（输入项不算做一层）；
+2. 输出层只有一个神经元；
+3. 神经元有一个线性输出，不经过激活函数处理，即在下图中，经过 $\Sigma$ 求和得到 $Z$ 值之后，直接把 $Z$ 值输出。
+
+![multi_result](Images/multi_resultsetup.png)
+
+输出层
+
+由于我们只想完成一个回归（拟合）任务，所以输出层只有一个神经元。由于是线性的，所以没有用激活函数。
+$$
+\begin{aligned}
+Z&=
+\begin{pmatrix}
+  x_{11} & x_{12}
+\end{pmatrix}
+\begin{pmatrix}
+  w_1 \\\\ w_2
+\end{pmatrix}
++(b) \\\\
+&=x_{11}w_1+x_{12}w_2+b
+\end{aligned}
+$$
+
+写成矩阵形式：
+
+$$Z = X\cdot W + B$$
+
+损失函数
+
+因为是线性回归问题，所以损失函数使用均方差函数。
+
+$$loss_i(W,B) = \frac{1}{2} (z_i-y_i)^2 $$
+
+其中，$z_i$ 是样本预测值，$y_i$ 是样本的标签值。
+
+多样本多特征计算
+
+当进行多样本计算时，我们用 $m=3$ 个样本做一个实例化推导：
+
+$$
+z_1 = x_{11}w_1+x_{12}w_2+b
+$$
+
+$$
+z_2= x_{21}w_1+x_{22}w_2+b
+$$
+
+$$
+z_3 = x_{31}w_1+x_{32}w_2+b
+$$
+
+$$
+J(W,B) = \frac{1}{2 \times 3}[(z_1-y_1)^2+(z_2-y_2)^2+(z_3-y_3)^2]
+$$
+
+$$
+\begin{aligned}  
+\frac{\partial J}{\partial W}&=
+\begin{pmatrix}
+  \frac{\partial J}{\partial w_1} \\\\
+  \frac{\partial J}{\partial w_2}
+\end{pmatrix}
+=\begin{pmatrix}
+  \frac{\partial J}{\partial z_1}\frac{\partial z_1}{\partial w_1}+\frac{\partial J}{\partial z_2}\frac{\partial z_2}{\partial w_1}+\frac{\partial J}{\partial z_3}\frac{\partial z_3}{\partial w_1} \\\\
+  \frac{\partial J}{\partial z_1}\frac{\partial z_1}{\partial w_2}+\frac{\partial J}{\partial z_2}\frac{\partial z_2}{\partial w_2}+\frac{\partial J}{\partial z_3}\frac{\partial z_3}{\partial w_2}  
+\end{pmatrix}
+\\\\
+&=\begin{pmatrix}
+  \frac{1}{3}(z_1-y_1)x_{11}+\frac{1}{3}(z_2-y_2)x_{21}+\frac{1}{3}(z_3-y_3)x_{31} \\\\
+  \frac{1}{3}(z_1-y_1)x_{12}+\frac{1}{3}(z_2-y_2)x_{22}+\frac{1}{3}(z_3-y_3)x_{32}
+\end{pmatrix}
+\\\\
+&=\frac{1}{3}
+\begin{pmatrix}
+  x_{11} & x_{21} & x_{31} \\\\
+  x_{12} & x_{22} & x_{32}
+\end{pmatrix}
+\begin{pmatrix}
+  z_1-y_1 \\\\
+  z_2-y_2 \\\\
+  z_3-y_3
+\end{pmatrix}
+\\\\
+&=\frac{1}{3}
+\begin{pmatrix}
+  x_{11} & x_{12} \\\\
+  x_{21} & x_{22} \\\\
+  x_{31} & x_{32} 
+\end{pmatrix}^{\top}
+\begin{pmatrix}
+  z_1-y_1 \\\\
+  z_2-y_2 \\\\
+  z_3-y_3
+\end{pmatrix}
+\\\\
+&=\frac{1}{m}X^{\top}(Z-Y) 
+\end{aligned}
+
+$$
+注：3泛化为m。
+$$
+\frac{\partial J}{\partial B}=\frac{1}{m}(Z-Y) 
+$$
