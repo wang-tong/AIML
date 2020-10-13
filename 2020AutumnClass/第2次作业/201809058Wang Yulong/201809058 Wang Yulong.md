@@ -378,3 +378,4 @@ $$
 $$
 \frac{\partial J}{\partial B}=\frac{1}{m}(Z-Y) 
 $$
+</font>
